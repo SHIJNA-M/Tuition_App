@@ -1,0 +1,1377 @@
+{
+  "info": {
+    "name": "Tuition Center Management System API",
+    "description": "Complete API collection for testing the Tuition Center Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "teacherId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "studentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "parentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "teacherToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "studentToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "parentToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "boardId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "subjectId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "chapterId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "conceptId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "workId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "feedbackId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "linkId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "assignmentId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "1. Register Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"adminId\", pm.response.json().userId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Admin\",\n  \"last_name\": \"User\",\n  \"email\": \"admin@test.com\",\n  \"mobile\": \"+1234567100\",\n  \"password\": \"AdminPass123\",\n  \"role\": \"Admin\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register admin user with password. Check server console for OTP codes."
+          }
+        },
+        {
+          "name": "2. Verify Admin OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{adminId}}\",\n  \"emailOTP\": \"123456\",\n  \"mobileOTP\": \"654321\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "verify-otp"]
+            },
+            "description": "Verify admin account with OTPs from server console. Replace with actual OTP codes."
+          }
+        },
+        {
+          "name": "3. Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set(\"accessToken\", response.accessToken);",
+                  "    pm.environment.set(\"refreshToken\", response.refreshToken);",
+                  "    pm.environment.set(\"adminToken\", response.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"admin@test.com\",\n  \"password\": \"AdminPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with email/mobile and password. Returns JWT tokens immediately."
+          }
+        },
+        {
+          "name": "4. Register Teacher",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"teacherId\", pm.response.json().userId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Teacher\",\n  \"last_name\": \"Smith\",\n  \"email\": \"teacher@test.com\",\n  \"mobile\": \"+1234567200\",\n  \"password\": \"TeacherPass123\",\n  \"role\": \"Teacher\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register teacher user with password."
+          }
+        },
+        {
+          "name": "5. Verify Teacher OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{teacherId}}\",\n  \"emailOTP\": \"123456\",\n  \"mobileOTP\": \"654321\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "verify-otp"]
+            },
+            "description": "Verify teacher account with OTPs."
+          }
+        },
+        {
+          "name": "6. Login Teacher",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set(\"accessToken\", response.accessToken);",
+                  "    pm.environment.set(\"refreshToken\", response.refreshToken);",
+                  "    pm.environment.set(\"teacherToken\", response.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"teacher@test.com\",\n  \"password\": \"TeacherPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login teacher with password."
+          }
+        },
+        {
+          "name": "7. Register Student",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"studentId\", pm.response.json().userId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Student\",\n  \"last_name\": \"Johnson\",\n  \"email\": \"student@test.com\",\n  \"mobile\": \"+1234567300\",\n  \"password\": \"StudentPass123\",\n  \"role\": \"Student\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register student user with password."
+          }
+        },
+        {
+          "name": "8. Verify Student OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{studentId}}\",\n  \"emailOTP\": \"123456\",\n  \"mobileOTP\": \"654321\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "verify-otp"]
+            },
+            "description": "Verify student account with OTPs."
+          }
+        },
+        {
+          "name": "9. Login Student",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set(\"accessToken\", response.accessToken);",
+                  "    pm.environment.set(\"refreshToken\", response.refreshToken);",
+                  "    pm.environment.set(\"studentToken\", response.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"student@test.com\",\n  \"password\": \"StudentPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login student with password."
+          }
+        },
+        {
+          "name": "10. Register Parent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"parentId\", pm.response.json().userId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Parent\",\n  \"last_name\": \"Williams\",\n  \"email\": \"parent@test.com\",\n  \"mobile\": \"+1234567400\",\n  \"password\": \"ParentPass123\",\n  \"role\": \"Parent\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register parent user with password."
+          }
+        },
+        {
+          "name": "11. Verify Parent OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{parentId}}\",\n  \"emailOTP\": \"123456\",\n  \"mobileOTP\": \"654321\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "verify-otp"]
+            },
+            "description": "Verify parent account with OTPs."
+          }
+        },
+        {
+          "name": "12. Login Parent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set(\"accessToken\", response.accessToken);",
+                  "    pm.environment.set(\"refreshToken\", response.refreshToken);",
+                  "    pm.environment.set(\"parentToken\", response.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"parent@test.com\",\n  \"password\": \"ParentPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login parent with password."
+          }
+        },
+        {
+          "name": "13. Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"+1234567300\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "forgot-password"]
+            },
+            "description": "Request password reset OTP for student account."
+          }
+        },
+        {
+          "name": "14. Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"+1234567300\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewStudentPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "reset-password"]
+            },
+            "description": "Reset password with OTP verification."
+          }
+        },
+        {
+          "name": "15. Login with New Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set(\"accessToken\", response.accessToken);",
+                  "    pm.environment.set(\"refreshToken\", response.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"student@test.com\",\n  \"password\": \"NewStudentPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Verify password change by logging in with new password."
+          }
+        },
+        {
+          "name": "16. Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    pm.environment.set(\"accessToken\", pm.response.json().accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "Get new access token using refresh token."
+          }
+        },
+        {
+          "name": "17. Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Revoke refresh token and logout."
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Management (Admin)",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users?role=Student&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "Student"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\",\n  \"role\": \"Teacher\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Deactivate User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Academic Structure",
+      "item": [
+        {
+          "name": "Create Board",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"boardId\", pm.response.json().board.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"CBSE\",\n  \"description\": \"Central Board of Secondary Education\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/boards",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards"]
+            },
+            "description": "Create educational board (Admin only)"
+          }
+        },
+        {
+          "name": "Get All Boards",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/boards",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards"]
+            },
+            "description": "Get all boards"
+          }
+        },
+        {
+          "name": "Create Subject",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"subjectId\", pm.response.json().subject.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mathematics\",\n  \"description\": \"Advanced Mathematics for Class 10\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}/subjects",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}", "subjects"]
+            },
+            "description": "Create subject under board (Admin only)"
+          }
+        },
+        {
+          "name": "Get Subjects for Board",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}/subjects",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}", "subjects"]
+            },
+            "description": "Get all subjects for a board"
+          }
+        },
+        {
+          "name": "Create Chapter",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"chapterId\", pm.response.json().chapter.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Algebra\",\n  \"description\": \"Introduction to Algebraic Expressions\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/subjects/{{subjectId}}/chapters",
+              "host": ["{{baseUrl}}"],
+              "path": ["subjects", "{{subjectId}}", "chapters"]
+            },
+            "description": "Create chapter under subject (Admin only)"
+          }
+        },
+        {
+          "name": "Create Concept",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"conceptId\", pm.response.json().concept.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Linear Equations\",\n  \"explanation\": \"A linear equation is an equation in which the highest power of the variable is one. It can be written in the form ax + b = 0.\",\n  \"practice_questions\": [\n    \"Solve: 2x + 5 = 15\",\n    \"Find x: 3x - 7 = 11\",\n    \"Solve for y: 5y + 3 = 23\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chapters/{{chapterId}}/concepts",
+              "host": ["{{baseUrl}}"],
+              "path": ["chapters", "{{chapterId}}", "concepts"]
+            },
+            "description": "Create concept under chapter (Admin only)"
+          }
+        },
+        {
+          "name": "Get Complete Academic Structure",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/academic-structure",
+              "host": ["{{baseUrl}}"],
+              "path": ["academic-structure"]
+            },
+            "description": "Get entire academic hierarchy"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Student Work",
+      "item": [
+        {
+          "name": "Upload Student Work",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"workId\", pm.response.json().work.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Select PDF/JPEG/PNG file (max 10MB)"
+                },
+                {
+                  "key": "subjectId",
+                  "value": "{{subjectId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "conceptId",
+                  "value": "{{conceptId}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/student-work",
+              "host": ["{{baseUrl}}"],
+              "path": ["student-work"]
+            },
+            "description": "Student uploads assignment/homework"
+          }
+        },
+        {
+          "name": "Get Student Work",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/student-work?status=pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["student-work"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "Filter by status: pending or reviewed"
+                }
+              ]
+            },
+            "description": "Get student work with optional filters"
+          }
+        },
+        {
+          "name": "Get Student Work by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/student-work/{{workId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["student-work", "{{workId}}"]
+            },
+            "description": "View specific work with feedback"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "Create Feedback",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"feedbackId\", pm.response.json().feedback.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workId\": \"{{workId}}\",\n  \"comment\": \"Great work! Your understanding of linear equations is clear. Pay more attention to simplification in question 3. Keep practicing!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback"]
+            },
+            "description": "Teacher provides feedback on student work"
+          }
+        },
+        {
+          "name": "Update Feedback",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"Updated feedback: Excellent work! Your approach to solving linear equations shows strong understanding. Minor improvement needed in question 3 regarding algebraic simplification.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/feedback/{{feedbackId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback", "{{feedbackId}}"]
+            },
+            "description": "Teacher updates their feedback"
+          }
+        },
+        {
+          "name": "Delete Feedback",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/feedback/{{feedbackId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback", "{{feedbackId}}"]
+            },
+            "description": "Teacher deletes their feedback"
+          }
+        },
+        {
+          "name": "Get Feedback",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback"]
+            },
+            "description": "Get all feedback"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Linking",
+      "item": [
+        {
+          "name": "Create Parent-Student Link",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"linkId\", pm.response.json().link.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parentId\": \"{{parentId}}\",\n  \"studentId\": \"{{studentId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/links/parent-student",
+              "host": ["{{baseUrl}}"],
+              "path": ["links", "parent-student"]
+            },
+            "description": "Link parent to student for monitoring (Admin only)"
+          }
+        },
+        {
+          "name": "Get Parent-Student Links",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/links/parent-student",
+              "host": ["{{baseUrl}}"],
+              "path": ["links", "parent-student"]
+            },
+            "description": "View parent-student links (Admin sees all, Parent sees their own)"
+          }
+        },
+        {
+          "name": "Delete Parent-Student Link",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/links/parent-student/{{linkId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["links", "parent-student", "{{linkId}}"]
+            },
+            "description": "Delete parent-student link (Admin only)"
+          }
+        },
+        {
+          "name": "Create Teacher Assignment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set(\"assignmentId\", pm.response.json().assignment.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teacherId\": \"{{teacherId}}\",\n  \"studentId\": \"{{studentId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/links/teacher-student",
+              "host": ["{{baseUrl}}"],
+              "path": ["links", "teacher-student"]
+            },
+            "description": "Assign teacher to student (Admin only)"
+          }
+        },
+        {
+          "name": "Get Teacher Assignments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/links/teacher-student",
+              "host": ["{{baseUrl}}"],
+              "path": ["links", "teacher-student"]
+            },
+            "description": "View teacher assignments (Admin sees all, Teacher sees their own)"
+          }
+        },
+        {
+          "name": "Delete Teacher Assignment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/links/teacher-student/{{assignmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["links", "teacher-student", "{{assignmentId}}"]
+            },
+            "description": "Delete teacher assignment (Admin only)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboards",
+      "item": [
+        {
+          "name": "Admin Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "admin"]
+            },
+            "description": "View system-wide statistics (Admin only)"
+          }
+        },
+        {
+          "name": "Teacher Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/teacher",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "teacher"]
+            },
+            "description": "View assigned students and their work (Teacher only)"
+          }
+        },
+        {
+          "name": "Student Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/student",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "student"]
+            },
+            "description": "View own work and feedback (Student only)"
+          }
+        },
+        {
+          "name": "Parent Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/parent",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "parent"]
+            },
+            "description": "View linked students' progress (Parent only)"
+          }
+        }
+      ]
+    }
+  ]
+}
